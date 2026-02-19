@@ -303,7 +303,11 @@ with st.expander("🗺️ Neighborhood Cost Map", expanded=True):
         locations="Neighborhood",
         featureidkey="id",
         color="Monthly Rent",
-        color_continuous_scale="RdYlGn_r",
+        color_continuous_scale=[
+            [0.0, "#b5d99c"],   # light yellow-green  (low rent)
+            [0.5, "#fff7a8"],   # light yellow         (median)
+            [1.0, "#ffcc70"],   # light amber-orange   (high rent)
+        ],
         hover_name="Neighborhood",
         hover_data={
             "Neighborhood": False,
