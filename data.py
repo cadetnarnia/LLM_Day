@@ -5,12 +5,13 @@
 SPENDING_STYLE_INDEX = {"Frugal": 0, "Moderate": 1, "Comfortable": 2}
 
 # ---------------------------------------------------------------------------
-# Neighborhoods — rent by unit type, monthly parking cost, description
+# Neighborhoods — rent by unit type, parking cost, description, coordinates
 # ---------------------------------------------------------------------------
 NEIGHBORHOODS = {
     "Downtown / Capitol Square": {
         "description": "High walkability, close to State St, restaurants, nightlife, and the Capitol.",
         "parking_monthly": 150,
+        "lat": 43.0738, "lon": -89.3838,
         "studio": (950, 1150, 1400),
         "1BR":    (1200, 1500, 1900),
         "2BR":    (1700, 2100, 2600),
@@ -18,6 +19,7 @@ NEIGHBORHOODS = {
     "Near East Side": {
         "description": "Trendy and bikeable, close to Willy St Co-op, coffee shops, and the lake path.",
         "parking_monthly": 50,
+        "lat": 43.0814, "lon": -89.3589,
         "studio": (850, 1000, 1250),
         "1BR":    (1050, 1300, 1600),
         "2BR":    (1400, 1700, 2100),
@@ -25,6 +27,7 @@ NEIGHBORHOODS = {
     "Willy Street / Marquette": {
         "description": "Eclectic and walkable neighborhood between the lakes, strong community feel.",
         "parking_monthly": 50,
+        "lat": 43.0762, "lon": -89.3700,
         "studio": (850, 1000, 1200),
         "1BR":    (1000, 1250, 1550),
         "2BR":    (1350, 1650, 2000),
@@ -32,6 +35,7 @@ NEIGHBORHOODS = {
     "Isthmus / Broom St": {
         "description": "Dense urban corridor between Lake Mendota and Lake Monona, very central.",
         "parking_monthly": 100,
+        "lat": 43.0700, "lon": -89.3985,
         "studio": (900, 1100, 1350),
         "1BR":    (1100, 1400, 1750),
         "2BR":    (1500, 1900, 2350),
@@ -39,13 +43,47 @@ NEIGHBORHOODS = {
     "University Ave / Campus Area": {
         "description": "High-density student corridor, very walkable, close to UW and Memorial Union.",
         "parking_monthly": 120,
+        "lat": 43.0730, "lon": -89.4063,
         "studio": (800, 950, 1150),
         "1BR":    (950, 1200, 1450),
         "2BR":    (1300, 1600, 1950),
     },
+    "Near West Side (Monroe St)": {
+        "description": "Charming residential area along Monroe St, close to Vilas Park and the zoo.",
+        "parking_monthly": 20,
+        "lat": 43.0620, "lon": -89.4195,
+        "studio": (850, 1000, 1200),
+        "1BR":    (1050, 1300, 1600),
+        "2BR":    (1400, 1700, 2100),
+    },
+    "West Side": {
+        "description": "Established residential neighborhoods west of campus, good mix of housing options.",
+        "parking_monthly": 0,
+        "lat": 43.0700, "lon": -89.4600,
+        "studio": (800, 950, 1150),
+        "1BR":    (1000, 1200, 1500),
+        "2BR":    (1300, 1600, 1950),
+    },
+    "Far West Side": {
+        "description": "Newer developments near West Towne Mall, more car-dependent but spacious and affordable.",
+        "parking_monthly": 0,
+        "lat": 43.0720, "lon": -89.5200,
+        "studio": (750, 900, 1100),
+        "1BR":    (950, 1150, 1400),
+        "2BR":    (1250, 1500, 1850),
+    },
+    "North Side": {
+        "description": "Diverse working-class neighborhood, more affordable, close to Warner Park and the lakes.",
+        "parking_monthly": 0,
+        "lat": 43.1150, "lon": -89.3750,
+        "studio": (700, 850, 1050),
+        "1BR":    (900, 1100, 1350),
+        "2BR":    (1150, 1400, 1750),
+    },
     "Middleton": {
         "description": "Western neighbor city, quieter residential feel, good access to West Madison employers.",
         "parking_monthly": 0,
+        "lat": 43.1067, "lon": -89.5037,
         "studio": (800, 950, 1150),
         "1BR":    (1000, 1200, 1500),
         "2BR":    (1300, 1600, 2000),
@@ -53,6 +91,7 @@ NEIGHBORHOODS = {
     "Monona": {
         "description": "Peaceful lakeside community southeast of Madison, mostly single-family and quiet.",
         "parking_monthly": 0,
+        "lat": 43.0569, "lon": -89.3348,
         "studio": (750, 900, 1100),
         "1BR":    (950, 1150, 1400),
         "2BR":    (1250, 1500, 1850),
@@ -86,8 +125,8 @@ TRANSPORT = {
 }
 
 CAR_COSTS = {
-    "gas_monthly": 80,        # ~$3.20/gal, ~25 mpg, ~625 mi/month
-    "insurance_monthly": 105, # WI avg, single adult, good driving record
+    "gas_monthly": 80,         # ~$3.20/gal, ~25 mpg, ~625 mi/month
+    "insurance_monthly": 105,  # WI avg, single adult, good driving record
     "maintenance_monthly": 60, # oil changes, tires, etc. amortized
 }
 
@@ -95,9 +134,9 @@ CAR_COSTS = {
 # Utilities
 # ---------------------------------------------------------------------------
 UTILITIES = {
-    "electric_gas_avg": 100,   # MG&E annual monthly average (higher in winter)
-    "internet": 65,            # Spectrum or TDS standard tier
-    "renters_insurance": 15,   # Wisconsin average
+    "electric_gas_avg": 100,  # MG&E annual monthly average (higher in winter)
+    "internet": 65,           # Spectrum or TDS standard tier
+    "renters_insurance": 15,  # Wisconsin average
 }
 
 # ---------------------------------------------------------------------------
@@ -129,8 +168,8 @@ LIFESTYLE = {
         "None":                  0,
         "Planet Fitness":        25,
         "UW SERF (non-student)": 35,
-        "Madison YMCA":          52,
         "Anytime Fitness":       40,
+        "Madison YMCA":          52,
         "Boutique Studio":      120,
     },
     "streaming": {
