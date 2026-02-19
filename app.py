@@ -15,6 +15,19 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------------------------
+# Session state — lets map clicks update the neighborhood selectbox
+# ---------------------------------------------------------------------------
+if "neighborhood" not in st.session_state:
+    st.session_state.neighborhood = list(NEIGHBORHOODS.keys())[0]
+if "_map_click" not in st.session_state:
+    st.session_state._map_click = None
+
+# Apply any pending map-click selection BEFORE widgets are rendered
+if st.session_state._map_click is not None:
+    st.session_state.neighborhood = st.session_state._map_click
+    st.session_state._map_click = None
+
+# ---------------------------------------------------------------------------
 # Calculation engine
 # ---------------------------------------------------------------------------
 
@@ -74,7 +87,13 @@ with st.sidebar:
     st.title("Your Situation")
 
     st.subheader("🏠 Housing")
-    neighborhood = st.selectbox("Neighborhood", options=list(NEIGHBORHOODS.keys()))
+    _nbhd_opts = list(NEIGHBORHOODS.keys())
+    neighborhood = st.selectbox(
+        "Neighborhood",
+        options=_nbhd_opts,
+        index=_nbhd_opts.index(st.session_state.neighborhood),
+    )
+    st.session_state.neighborhood = neighborhood  # keep in sync with map clicks
     st.caption(NEIGHBORHOODS[neighborhood]["description"])
     unit_type = st.radio("Unit type", options=["studio", "1BR", "2BR"], horizontal=True)
     spending_style = st.select_slider(
@@ -190,8 +209,9 @@ with st.expander("📊 Monthly Breakdown & Spending Chart", expanded=True):
         fig.update_traces(texttemplate="$%{text:,.0f}", textposition="outside")
         fig.update_layout(
             showlegend=False, coloraxis_showscale=False,
-            margin=dict(l=10, r=40, t=10, b=10),
+            margin=dict(l=10, r=80, t=10, b=10),
             xaxis_title="$ / month", yaxis_title=None, height=420,
+            xaxis=dict(range=[0, df["Amount"].max() * 1.35]),
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -316,7 +336,16 @@ with st.expander("🗺️ Neighborhood Cost Map", expanded=True):
         coloraxis_colorbar=dict(title="Monthly Rent ($)"),
     )
 
-    st.plotly_chart(fig_map, use_container_width=True)
+    event = st.plotly_chart(fig_map, use_container_width=True, on_select="rerun", key="nbhd_map")
+    # If the user clicked a neighborhood polygon, update the selectbox
+    try:
+        if event.selection.points:
+            clicked = event.selection.points[0].get("location")
+            if clicked and clicked in NEIGHBORHOODS and clicked != st.session_state.neighborhood:
+                st.session_state._map_click = clicked
+                st.rerun()
+    except AttributeError:
+        pass
 
 st.divider()
 
