@@ -200,6 +200,73 @@ LIFESTYLE = {
 }
 
 # ---------------------------------------------------------------------------
+# Neighborhood GeoJSON polygons (approximate boundaries for map choropleth)
+# Coordinates are [longitude, latitude] per GeoJSON spec.
+# First and last coordinate must match to close each ring.
+# ---------------------------------------------------------------------------
+
+def _poly(name, coords):
+    """Build a GeoJSON Feature from a name and list of (lon, lat) tuples."""
+    ring = [[lon, lat] for lon, lat in coords]
+    ring.append(ring[0])  # close the ring
+    return {
+        "type": "Feature",
+        "id": name,
+        "geometry": {"type": "Polygon", "coordinates": [ring]},
+        "properties": {},
+    }
+
+NEIGHBORHOOD_GEOJSON = {
+    "type": "FeatureCollection",
+    "features": [
+        _poly("Downtown / Capitol Square", [
+            (-89.400, 43.058), (-89.362, 43.058),
+            (-89.362, 43.083), (-89.400, 43.083),
+        ]),
+        _poly("Willy Street / Marquette", [
+            (-89.362, 43.052), (-89.325, 43.052),
+            (-89.325, 43.082), (-89.362, 43.082),
+        ]),
+        _poly("Near East Side", [
+            (-89.325, 43.067), (-89.290, 43.067),
+            (-89.290, 43.103), (-89.325, 43.103),
+        ]),
+        _poly("Isthmus / Broom St", [
+            (-89.420, 43.056), (-89.398, 43.056),
+            (-89.398, 43.082), (-89.420, 43.082),
+        ]),
+        _poly("University Ave / Campus Area", [
+            (-89.458, 43.057), (-89.418, 43.057),
+            (-89.418, 43.090), (-89.458, 43.090),
+        ]),
+        _poly("Near West Side (Monroe St)", [
+            (-89.465, 43.034), (-89.398, 43.034),
+            (-89.398, 43.061), (-89.465, 43.061),
+        ]),
+        _poly("West Side", [
+            (-89.515, 43.057), (-89.458, 43.057),
+            (-89.458, 43.095), (-89.515, 43.095),
+        ]),
+        _poly("Far West Side", [
+            (-89.582, 43.047), (-89.510, 43.047),
+            (-89.510, 43.097), (-89.582, 43.097),
+        ]),
+        _poly("North Side", [
+            (-89.435, 43.088), (-89.318, 43.088),
+            (-89.318, 43.158), (-89.435, 43.158),
+        ]),
+        _poly("Middleton", [
+            (-89.572, 43.085), (-89.465, 43.085),
+            (-89.465, 43.145), (-89.572, 43.145),
+        ]),
+        _poly("Monona", [
+            (-89.372, 43.028), (-89.290, 43.028),
+            (-89.290, 43.065), (-89.372, 43.065),
+        ]),
+    ],
+}
+
+# ---------------------------------------------------------------------------
 # Future expansion: per-person scaling factors
 # ---------------------------------------------------------------------------
 PERSON_SCALING = {

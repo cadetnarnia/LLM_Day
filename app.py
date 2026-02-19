@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import pandas as pd
 
 from data import (
-    NEIGHBORHOODS, TRANSPORT, CAR_COSTS, UTILITIES,
+    NEIGHBORHOODS, NEIGHBORHOOD_GEOJSON, TRANSPORT, CAR_COSTS, UTILITIES,
     FOOD, LIFESTYLE, SPENDING_STYLE_INDEX,
 )
 
@@ -257,7 +257,7 @@ with st.expander("🗺️ Neighborhood Cost Map", expanded=True):
     st.markdown(
         "Estimated **monthly rent** across Madison neighborhoods for your selected "
         f"unit type (**{unit_type}**) and spending style (**{spending_style}**). "
-        "Hover a bubble for details. Your selected neighborhood is highlighted."
+        "Hover a region for details. Your selected neighborhood is highlighted."
     )
 
     # Build per-neighborhood data for the map
@@ -267,52 +267,46 @@ with st.expander("🗺️ Neighborhood Cost Map", expanded=True):
     for nbhd_name, nbhd_data in NEIGHBORHOODS.items():
         rent = nbhd_data[unit_type][style_idx]
         estimated_total = rent + other_costs
-        is_selected = nbhd_name == neighborhood
         map_rows.append({
             "Neighborhood": nbhd_name,
             "lat": nbhd_data["lat"],
             "lon": nbhd_data["lon"],
             "Monthly Rent": rent,
             "Est. Monthly Total": estimated_total,
-            "Unit": unit_type,
-            "Selected": "⭐ Selected" if is_selected else "Other",
         })
 
     map_df = pd.DataFrame(map_rows)
 
-    fig_map = px.scatter_map(
+    fig_map = px.choropleth_map(
         map_df,
-        lat="lat",
-        lon="lon",
-        size="Monthly Rent",
+        geojson=NEIGHBORHOOD_GEOJSON,
+        locations="Neighborhood",
+        featureidkey="id",
         color="Monthly Rent",
         color_continuous_scale="RdYlGn_r",
         hover_name="Neighborhood",
         hover_data={
+            "Neighborhood": False,
             "Monthly Rent": ":$,.0f",
             "Est. Monthly Total": ":$,.0f",
-            "Unit": True,
-            "Selected": True,
-            "lat": False,
-            "lon": False,
         },
-        zoom=11,
-        center={"lat": 43.080, "lon": -89.420},
+        zoom=10.5,
+        center={"lat": 43.090, "lon": -89.430},
         map_style="carto-positron",
-        size_max=40,
-        height=520,
+        opacity=0.65,
+        height=540,
     )
 
-    # Highlight selected neighborhood with a star marker
+    # Highlight selected neighborhood with a star at its centroid
     selected_row = map_df[map_df["Neighborhood"] == neighborhood].iloc[0]
     fig_map.add_trace(go.Scattermap(
         lat=[selected_row["lat"]],
         lon=[selected_row["lon"]],
         mode="markers+text",
-        marker=dict(size=18, color="gold", symbol="star"),
+        marker=dict(size=16, color="gold", symbol="star"),
         text=["◀ You"],
         textposition="middle right",
-        textfont=dict(size=13, color="black"),
+        textfont=dict(size=13, color="#222"),
         hoverinfo="skip",
         showlegend=False,
     ))
